@@ -39,8 +39,8 @@ export class IgdbService {
     /*
         Returns the cheapest price of a game by using cheapshark api (another api)
     */
-    async searchPrice(gameTitle: string): Promise<number | null>{
-        return fetch(`https://www.cheapshark.com/api/1.0/games?title=${gameTitle}&exact=1`).then(res => res.json()).then(res => res?.[0]?.cheapest || null);
+    async searchPrice(steamAppId: number): Promise<number | null>{
+        return fetch(`https://www.cheapshark.com/api/1.0/games?steamAppID=${steamAppId}`).then(res => res.json()).then(res => res?.[0]?.cheapest || null);
     }
 
     get bearerToken(){
@@ -99,12 +99,15 @@ export class IgdbQuery{
         return this;
     }
 
-    addfield(field: string){
-        if(this.request_fields === '*'){
-            this.request_fields = field;
-            return this;
-        }
-        this.request_fields += ',' + field;
+    addfields(...fields: string[]){
+        fields.forEach(field => {
+            if(this.request_fields === '*'){
+                this.request_fields = field;
+                return;
+            }
+            this.request_fields += ',' + field;
+        });
+        
         return this;
     }
 
@@ -122,12 +125,12 @@ export class IgdbQuery{
             parsedBody += ";";
         }
 
-        if(this.sortField && this.sortOrder){
-            parsedBody += `sort ${this.sortField} ${this.sortOrder};`;
-        }
-
         if(this.searchWords){
             parsedBody += `search "${this.searchWords}";`;
+        }
+
+        if(this.sortField && this.sortOrder){
+            parsedBody += `sort ${this.sortField} ${this.sortOrder};`;
         }
 
         parsedBody += `limit ${this.request_limit < 50 ? this.request_limit : 50};`;
@@ -150,7 +153,7 @@ export class RequestFilter{
     private readonly _value: string;
 
     static readonly operators = [
-        '=', '!=', '>', '<', '>=', '<='
+        '=', '!=', '>', '<', '>=', '<=', '~'
     ]
 
     private constructor(variable: string, operator: string, value: string){
