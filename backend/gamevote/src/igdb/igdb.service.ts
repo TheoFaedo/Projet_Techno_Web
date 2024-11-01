@@ -73,6 +73,11 @@ export class IgdbQuery{
         return this;
     }
 
+    basicGamesFields(){
+        this.addfields('id', 'name', 'cover.url', 'first_release_date', 'summary', 'slug', 'websites.url', 'websites.category', 'game_modes.name', 'genres.name', 'platforms.name');
+        return this;
+    }
+
     sort(sortField: string, sortOrder: string){
         this.sortField = sortField;
         this.sortOrder = sortOrder;
@@ -134,6 +139,8 @@ export class IgdbQuery{
         }
 
         parsedBody += `limit ${this.request_limit < 50 ? this.request_limit : 50};`;
+
+        console.log(parsedBody);
 
         return fetch(`https://api.igdb.com/v4/${this.endpoint}`, {
             method: 'POST',

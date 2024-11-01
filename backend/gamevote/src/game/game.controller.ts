@@ -1,23 +1,22 @@
-import { Controller, Get } from '@nestjs/common';
-import { GameDao } from './dao/game.dao';
+import { ClassSerializerInterceptor, Controller, Get, Param, Query, UseInterceptors } from '@nestjs/common';
 import { GameService } from './game.service';
-import { IgdbService, RequestFilter } from 'src/igdb/igdb.service';
+import { SearchGameDto } from './dto/searchGame.dto';
+import { GameEntity } from './game.entities';
 
 @Controller('games')
 export class GameController {
 
-    constructor(private readonly gameService: GameService, private readonly igdbService: IgdbService) {}
+    constructor(private readonly gameService: GameService) {}
 
+    @UseInterceptors(ClassSerializerInterceptor)
     @Get()
-    async getGames() {
-        
-        let games = await this.igdbService.createRequest().games()
-        .addfields('name', 'cover.url', 'first_release_date', 'rating', 'summary', 'slug', 'websites.url', 'websites.category', 'game_modes', 'rating')
-        .filter(RequestFilter.create('parent_game', '=', 'null')).filter(RequestFilter.create('version_parent', '=', 'null'))
-        .filter(RequestFilter.create('rating', '!=', 'null'))
-        .filter(RequestFilter.create('game_modes', '=', '3'))
-        .limit(1).sort('rating', 'desc').execute();
+    async getGames(@Query() qParams: SearchGameDto): Promise<GameEntity[]> {
+        return this.gameService.getAllGames(qParams);
+    }
 
-        return games;
+    @UseInterceptors(ClassSerializerInterceptor)
+    @Get(':id')
+    async getGame(@Param() params: any): Promise<GameEntity> {
+        return this.gameService.getOneGameByIgbdId(params.id);
     }
 }
