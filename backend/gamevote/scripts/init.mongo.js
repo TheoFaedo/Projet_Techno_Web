@@ -8,8 +8,8 @@ db.getCollection('games').insert({
   igdbId: 1,
   steamAppId: 1,
   price: 0,
-  last_time_refresh_price: new Date()
-})
+  last_time_refresh_price: new Date(),
+});
 
 // display the final initial data
 db.getCollection('game').find({});

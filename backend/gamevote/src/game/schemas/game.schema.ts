@@ -1,51 +1,51 @@
-import * as mongoose from "mongoose";
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import * as mongoose from 'mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 
 export type GameDocument = Game & Document;
 
 @Schema({
-    toJSON: {
-        virtuals: true,
-        transform: (doc: any, ret: any) => {
-            // delete obsolete data
-            delete ret._id;
-        },
+  toJSON: {
+    virtuals: true,
+    transform: (doc: any, ret: any) => {
+      // delete obsolete data
+      delete ret._id;
     },
-    versionKey: false,
+  },
+  versionKey: false,
 })
-export class Game{
-    @Prop({
-        type: mongoose.Schema.Types.ObjectId,
-        auto: true,
-    })
-    _id: any;
+export class Game {
+  @Prop({
+    type: mongoose.Schema.Types.ObjectId,
+    auto: true,
+  })
+  _id: any;
 
-    @Prop()
-    name: string
+  @Prop()
+  name: string;
 
-    @Prop()
-    igdbId: number;
+  @Prop()
+  igdbId: number;
 
-    @Prop()
-    steamAppId: number;
+  @Prop()
+  steamAppId: number;
 
-    @Prop()
-    price: number;
+  @Prop()
+  price: number;
 
-    @Prop()
-    last_time_price_refresh: Date;
+  @Prop()
+  last_time_price_refresh: Date;
 
-    @Prop()
-    first_release_date: number;
+  @Prop()
+  first_release_date: number;
 
-    @Prop()
-    genres: number[];
+  @Prop()
+  genres: number[];
 
-    @Prop()
-    platforms: number[];
+  @Prop()
+  platforms: number[];
 
-    @Prop()
-    game_modes: number[];
+  @Prop()
+  game_modes: number[];
 }
 
 export const GameSchema = SchemaFactory.createForClass(Game);
