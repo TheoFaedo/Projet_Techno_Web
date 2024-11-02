@@ -21,6 +21,9 @@ export class Game{
     _id: any;
 
     @Prop()
+    name: string
+
+    @Prop()
     igdbId: number;
 
     @Prop()
@@ -31,6 +34,18 @@ export class Game{
 
     @Prop()
     last_time_price_refresh: Date;
+
+    @Prop()
+    first_release_date: number;
+
+    @Prop()
+    genres: number[];
+
+    @Prop()
+    platforms: number[];
+
+    @Prop()
+    game_modes: number[];
 }
 
 export const GameSchema = SchemaFactory.createForClass(Game);

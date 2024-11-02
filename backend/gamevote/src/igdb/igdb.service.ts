@@ -55,7 +55,7 @@ export class IgdbService {
 export class IgdbQuery{
 
     private endpoint: string;
-    private filters: RequestFilter[] = [];
+    private _filters: RequestFilter[] = [];
     private sortField?: string;
     private sortOrder?: string;
     private searchWords?: string;
@@ -85,7 +85,14 @@ export class IgdbQuery{
     }
 
     filter(filter: RequestFilter){
-        this.filters.push(filter);
+        this._filters.push(filter);
+        return this;
+    }
+
+    filters(filters: RequestFilter[]){
+        filters.forEach(filter => {
+            this._filters.push(filter);
+        });
         return this;
     }
 
@@ -121,9 +128,9 @@ export class IgdbQuery{
 
         let parsedBody = `fields ${this.request_fields};`;
 
-        if(this.filters && this.filters.length > 0){
+        if(this._filters && this._filters.length > 0){
             parsedBody += "where ";
-            this.filters.forEach(filter => {
+            this._filters.forEach(filter => {
                 parsedBody += `${filter.variable} ${filter.operator} ${filter.value} & `;
             })
             parsedBody = parsedBody.slice(0, -2);
@@ -139,8 +146,6 @@ export class IgdbQuery{
         }
 
         parsedBody += `limit ${this.request_limit < 50 ? this.request_limit : 50};`;
-
-        console.log(parsedBody);
 
         return fetch(`https://api.igdb.com/v4/${this.endpoint}`, {
             method: 'POST',

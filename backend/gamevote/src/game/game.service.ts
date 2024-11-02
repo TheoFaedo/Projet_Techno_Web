@@ -42,10 +42,14 @@ export class GameService {
             .basicGamesFields()
             .filter(RequestFilter.create('parent_game', '=', 'null'))
             .filter(RequestFilter.create('version_parent', '=', 'null'))
+        
+        // Filters
+        const requestFilters: RequestFilter[] = [];
+        if(params.q) requestFilters.push(RequestFilter.create('name', '~', `*"${params.q}"*`));
+        if(params.game_modes) requestFilters.push(RequestFilter.create('game_modes', '=', params.game_modes.toString()));
+        if(params.genres) requestFilters.push(RequestFilter.create('genres', '=', params.genres.toString()));
 
-        if(params.q) gameQuery.filter(RequestFilter.create('name', '~', `*"${params.q}"*`));
-        if(params.game_modes) gameQuery.filter(RequestFilter.create('game_modes', '=', params.game_modes.toString()));
-        if(params.genres) gameQuery.filter(RequestFilter.create('genres', '=', params.genres.toString()));
+        if(requestFilters.length > 0) gameQuery.filters(requestFilters);
 
         // Sorts
         const sortTuple: SortTuple =  params.sort ? sortStringAssociation[params.sort] : null;
@@ -59,14 +63,12 @@ export class GameService {
 
         // Get IGDB games
         const igdb_games = await gameQuery.execute();
-        const igdb_games_ids = igdb_games.map((game: { id: any; }) => game.id);
+        console.log(igdb_games);
 
         // Get saved games
-        const saved_games = (await this.gameDao.getGames(igdb_games_ids, sortTuple && sortTuple.isIgdbSort ? {name: sortTuple.name, order: sortTuple.order} : null))
-        .reduce((acc, game) => {
-            acc[game.igdbId] = game;
-            return acc;
-        }, {});
+        const saved_games = await this.gameDao.getGames(sortTuple && sortTuple.isIgdbSort ? {name: sortTuple.name, order: sortTuple.order} : null, requestFilters);
+        console.log(saved_games);
+
 
         // Add saved features to games
         igdb_games.forEach((game: { [x: string]: any; id: string | number; }) => {
@@ -100,7 +102,11 @@ export class GameService {
         if(!saved_game){
             const steamAppId = this.findSteamId(game);
             const price = steamAppId ? await this.igdbService.searchPrice(steamAppId) : null;
-            await this.gameDao.create(igdbId, steamAppId, price);
+            const platforms = game.platforms.map((platform: any) => platform.id);
+            const genres = game.genres.map((genre: any) => genre.id);
+            const game_modes = game.game_modes.map((game_mode: any) => game_mode.id);
+
+            await this.gameDao.create(igdbId,steamAppId, price, game.name, game.first_release_date, game_modes, platforms, genres);
         }else{
             // Test if a price is outdated of a week and refresh it if needed
             if(saved_game['price'] &&saved_game['last_time_price_refresh'] < new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000)){

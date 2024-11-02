@@ -15,5 +15,5 @@ import { IgdbModule } from 'src/igdb/igdb.module';
     providers: [GameDao, GameService],
 })
 export class GameModule {
-
+    
 }

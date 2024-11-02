@@ -94,7 +94,7 @@ export class GameEntity {
 
     @Expose()
     @Type(() => GamemodeEntity)
-    gamemodes: GamemodeEntity[];
+    game_modes: GamemodeEntity[];
 
     @Expose()
     @Type(() => WebsiteEntity)
