@@ -22,7 +22,7 @@ export class Game{
 
     @Prop()
     name: string
-
+    
     @Prop()
     igdbId: number;
 
