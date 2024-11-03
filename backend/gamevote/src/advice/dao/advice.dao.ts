@@ -39,7 +39,7 @@ export class AdviceDao {
    */
   create(advice: CreateAdviceDto): Promise<Advice> {
     const newAdvice = new this._adviceModel(advice);
-    return newAdvice.save();
+    return newAdvice.save().then((advice) => advice.toObject());
   }
 
   /**

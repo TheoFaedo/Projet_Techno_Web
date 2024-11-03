@@ -6,11 +6,14 @@ import {
   Delete,
   Param,
   Body,
+  UseInterceptors,
+  ClassSerializerInterceptor,
 } from '@nestjs/common';
 import { AdviceService } from './advice.service'; // Adjust the import according to your structure
 import { CreateAdviceDto } from './dto/create-advice.dto'; // Adjust the import according to your structure
 import { UpdateAdviceDto } from './dto/update-advice.dto'; // Adjust the import according to your structure
 import { Advice } from './schemas/advice.schema'; // Adjust the import according to your structure
+import { AdviceEntity } from './advice.entities';
 
 @Controller('advices')
 export class AdviceController {
@@ -46,10 +49,11 @@ export class AdviceController {
    * Create a new advice
    * @param {CreateAdviceDto} createAdviceDto - Data for creating an advice
    */
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post() // Route to create a new advice
   async createAdvice(
     @Body() createAdviceDto: CreateAdviceDto,
-  ): Promise<Advice> {
+  ): Promise<AdviceEntity> {
     return this.adviceService.createAdvice(createAdviceDto);
   }
 

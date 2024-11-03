@@ -3,6 +3,7 @@ import { AdviceDao } from './dao/advice.dao';
 import { CreateAdviceDto } from './dto/create-advice.dto';
 import { UpdateAdviceDto } from './dto/update-advice.dto';
 import { Advice } from './schemas/advice.schema';
+import { AdviceEntity } from './advice.entities';
 
 @Injectable()
 export class AdviceService {
@@ -37,8 +38,8 @@ export class AdviceService {
    * @param {CreateAdviceDto} createAdviceDto - DTO containing advice data
    * @return {Promise<Advice>}
    */
-  async createAdvice(createAdviceDto: CreateAdviceDto): Promise<Advice> {
-    return this.adviceDao.create(createAdviceDto);
+  async createAdvice(createAdviceDto: CreateAdviceDto): Promise<AdviceEntity> {
+    return this.adviceDao.create(createAdviceDto).then((advice) => new AdviceEntity(advice)).then((advice) => {console.log(advice); return advice;});
   }
 
   /**
