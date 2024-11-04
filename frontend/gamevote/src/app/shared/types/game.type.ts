@@ -18,17 +18,24 @@ export type Website = {
     category: number;
 }
 
+export type Advise = {
+    author: string;
+    content: string;
+    note: number;
+}
+
 export type Game = {
     id: number;
     igbdId: number;
     name: string;
-    first_release_date: number;
+    first_release_date: number | string;
     platforms: Platform[];
     genres: Genre[];
     game_modes: Gamemode[];
     websites: Website[];
-    cover: string;
+    cover: {url: string};
     rating: number;
     summary: string;
     steam_price: number;
+    advises?: Advise[];
 }

@@ -1,0 +1,29 @@
+.advises{
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 2rem;
+    align-items: center;
+}
+
+.advises > h3{
+    font-size: large;
+}
+
+.advises > button{
+    height: 100%;
+    font-size: large;
+}
+
+.advices_container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: medium;
+    padding: 1rem 2rem;
+}
+
+.game-cover-avatar img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+  }

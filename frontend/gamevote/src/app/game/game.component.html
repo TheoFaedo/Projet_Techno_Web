@@ -1,0 +1,50 @@
+@if (game) {
+    <mat-card>
+        <mat-card-header>
+            <div mat-card-avatar class="game-cover-avatar">
+            <img [src]="'https:' + game.cover.url" alt="{{ game.name }}">
+            </div>
+            <mat-card-title>{{ game.name }}</mat-card-title>
+            <mat-card-subtitle>{{ game.first_release_date }}</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+            <p>{{ game.summary }}</p>
+            <div class="caracteristics_container">
+                <div class="caracteristic">
+                    <span>Mode(s) de jeu :</span>
+                    <mat-chip-set *ngFor="let mode of game.game_modes" class="caracteristic_mat-chip-set">
+                        <mat-chip class="small-chip" disableRipple>{{ mode.name }}</mat-chip>
+                    </mat-chip-set>
+                </div>
+                <div class="caracteristic">
+                    <span>Genre(s) :</span>
+                    <mat-chip-set *ngFor="let genre of game.genres" class="caracteristic_mat-chip-set">
+                        <mat-chip class="small-chip" disableRipple>{{ genre.name }}</mat-chip>
+                    </mat-chip-set>
+                </div>
+                <div class="caracteristic">
+                    <span>Plateforme(s) :</span>
+                    <mat-chip-set *ngFor="let platform of game.platforms" class="caracteristic_mat-chip-set">
+                        <mat-chip class="small-chip" disableRipple>{{ platform.name }}</mat-chip>
+                    </mat-chip-set>
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+    <div class="advises">
+        <h3>Advises</h3>
+        <button>Écrire un avis</button>
+    </div>
+    @if (game.advises) {
+        <mat-list>
+            <mat-list-item *ngFor="let advise of game.advises">
+                <p>{{ advise.author }} - {{ advise.note }} / 10</p>
+                <p>{{ advise.content }}</p>
+            </mat-list-item>
+        </mat-list>
+    }@else {
+        <div class="advices_container">
+            <p>Pas d'avis pour le moment</p>
+        </div>   
+    }
+}

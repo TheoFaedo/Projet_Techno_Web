@@ -1,14 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { Game } from '../shared/types/game.type';
-import { environment } from '../../../environments/environment';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { MatListModule } from '@angular/material/list';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import {MatSelectModule} from '@angular/material/select';
 import { CommonModule } from '@angular/common';
+import { MatInputModule } from '@angular/material/input';
+import {MatChipsModule} from '@angular/material/chips';
+import { GameService } from '../shared/services/game.service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'nwt-games',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, MatListModule, MatCardModule, MatFormFieldModule, MatSelectModule, MatInputModule, MatChipsModule, RouterLink],
   templateUrl: './games.component.html',
   styleUrl: './games.component.scss'
 })
@@ -16,31 +21,13 @@ export class GamesComponent implements OnInit {
 
   _games: Game[]; 
 
-  private readonly _backendURL: any;
-
-  constructor(private _httpClient: HttpClient) {
-    this._backendURL = {};
+  constructor(private _gameService: GameService) {
     this._games = [];
-
-    // build backend base url
-    let baseUrl = `${environment.backend.protocol}://${environment.backend.host}`;
-    if (environment.backend.port) {
-      baseUrl += `:${environment.backend.port}`;
-    }
-
-    // build all backend urls
-    // @ts-ignore
-    Object.keys(environment.backend.endpoints).forEach(k => this._backendURL[ k ] = `${baseUrl}${environment.backend.endpoints[ k ]}`);
   }
-
-  allGames(): Observable<Game[]> {
-    return this._httpClient.get<Game[]>(this._backendURL.allGames) as Observable<Game[]>;
-  }
-
   ngOnInit(): void {
-    this.allGames().subscribe(games => this._games = games);
+    this._gameService.allGames().subscribe(games => this._games = games);
   }
-  
+
   get games(): Game[] {
     return this._games;
   }

@@ -121,9 +121,9 @@ export class GameService {
       const price = steamAppId
         ? await this.igdbService.searchPrice(steamAppId)
         : null;
-      const platforms = game.platforms.map((platform: any) => platform.id);
-      const genres = game.genres.map((genre: any) => genre.id);
-      const game_modes = game.game_modes.map((game_mode: any) => game_mode.id);
+      const platforms = game.platforms ? game.platforms.map((platform: any) => platform.id) : [];
+      const genres = game.genres ? game.genres.map((genre: any) => genre.id) : [];
+      const game_modes = game.game_modes ? game.game_modes.map((game_mode: any) => game_mode.id) : [];
 
       await this.gameDao.create(
         igdbId,

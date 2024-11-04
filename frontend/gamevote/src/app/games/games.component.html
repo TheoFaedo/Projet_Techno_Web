@@ -1,3 +1,52 @@
-<section *ngFor="let game of games">
-    <p>{{game.name}}</p>
-</section>
+<div class="filter-container">
+    <mat-form-field>
+        <mat-label>Rechercher un jeu</mat-label>
+        <input matInput placeholder="Tapez pour rechercher">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" floatLabel="always">
+        <mat-label>Filtrer par type</mat-label>
+        <mat-select multiple>
+            <mat-option>Pas de filtre</mat-option>
+            <mat-option value="cooperative">Coopératif</mat-option>
+            <mat-option value="solo">Solo</mat-option>
+            <mat-option value="multiplayer">Multijoueur</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+        <mat-label>Trier par</mat-label>
+        <mat-select>
+            <mat-option value="name">Nom</mat-option>
+            <mat-option value="rating">Note</mat-option>
+            <mat-option value="price">Prix</mat-option>
+        </mat-select>
+    </mat-form-field>
+</div>
+<mat-list *ngFor="let game of games">
+    <mat-list-item>
+        <img matListItemAvatar src="https:{{ game.cover.url }}" class="game-cover"/>
+        <h3 matListItemTitle><a [routerLink]="['/game', game.id]">{{ game.name }}</a></h3>
+        <p matListItemLine>{{ game.summary }}</p>
+    </mat-list-item>
+    <div class="caracteristics_container">
+        <div class="caracteristic">
+            <span>Mode(s) de jeu :</span>
+            <mat-chip-set *ngFor="let mode of game.game_modes" class="caracteristic_mat-chip-set">
+                <mat-chip class="small-chip" disableRipple>{{ mode.name }}</mat-chip>
+            </mat-chip-set>
+        </div>
+        <div class="caracteristic">
+            <span>Genre(s) :</span>
+            <mat-chip-set *ngFor="let genre of game.genres" class="caracteristic_mat-chip-set">
+                <mat-chip class="small-chip" disableRipple>{{ genre.name }}</mat-chip>
+            </mat-chip-set>
+        </div>
+        <div class="caracteristic">
+            <span>Plateforme(s) :</span>
+            <mat-chip-set *ngFor="let platform of game.platforms" class="caracteristic_mat-chip-set">
+                <mat-chip class="small-chip" disableRipple>{{ platform.name }}</mat-chip>
+            </mat-chip-set>
+        </div>
+    </div>
+</mat-list>

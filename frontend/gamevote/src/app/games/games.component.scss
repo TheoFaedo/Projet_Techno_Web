@@ -1,0 +1,20 @@
+.caracteristics_container{
+    display: flex;
+    flex-direction: column;
+    padding: 0 1rem;
+}
+
+.caracteristic{
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.caracteristic_mat-chip-set{
+    display: flex;
+    align-items: center;
+}
+
+.small-chip {
+    height: 1.2rem !important;
+ }

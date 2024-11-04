@@ -1,1 +1,5 @@
-<nwt-games></nwt-games>
+<mat-toolbar color="primary">
+  <mat-icon (click)="goBack()" style="margin-right: 1rem;">arrow_back</mat-icon>
+  <span><a [routerLink]="['/']">Gamevote</a></span>
+</mat-toolbar>
+<router-outlet></router-outlet>
