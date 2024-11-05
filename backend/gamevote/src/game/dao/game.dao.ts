@@ -3,50 +3,99 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Game } from '../schemas/game.schema';
 import { Model, SortOrder } from 'mongoose';
 import { RequestFilter } from 'src/igdb/igdb.service';
+import { Advice } from '../../advice/schemas/advice.schema';
 
 @Injectable()
 export class GameDao {
   constructor(
-    @InjectModel(Game.name) private readonly _personModel: Model<Game>,
+    @InjectModel(Game.name) private readonly _gameModel: Model<Game>,
+    @InjectModel(Advice.name) private readonly _adviceModel: Model<Advice>,
   ) {}
 
-  getGames(
+  async getGames(
     sort?: { name: string; order: SortOrder } | null,
     filters?: RequestFilter[] | null,
   ) {
-    const query = this._personModel.find();
+    // Début de la pipeline d'agrégation
+    const pipeline: any[] = [
+      {
+        $lookup: {
+          from: 'advice', // Nom de la collection des avis dans MongoDB
+          localField: 'igdbId', // Champ dans la collection `games`
+          foreignField: 'gameId', // Champ correspondant dans la collection `advice`
+          as: 'advice', // Alias pour la collection d'avis jointe
+        },
+      },
+      {
+        $addFields: {
+          averageRating: {
+            $cond: {
+              if: { $gt: [{ $size: '$advice' }, 0] },
+              then: { $avg: '$advice.note' },
+              else: 0,
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          advice: 0, // On ne retourne pas la liste des avis pour réduire les données
+        },
+      },
+    ];
 
-    if (sort) {
-      query.sort([[sort.name, sort.order]]);
-    }
-
+    // Ajouter les filtres à la pipeline d'agrégation
     if (filters) {
       filters.forEach((filter) => {
-        if (filter.operator == '=') {
+        if (filter.operator === '=') {
           if (
-            filter.variable == 'genres' ||
-            filter.variable == 'platforms' ||
-            filter.variable == 'game_modes'
+            filter.variable === 'genres' ||
+            filter.variable === 'platforms' ||
+            filter.variable === 'game_mode'
           ) {
-            query
-              .where(filter.variable)
-              .all(filter.value.split(',').map((id) => Number(id)));
+            pipeline.push({
+              $match: {
+                [filter.variable]: {
+                  $all: filter.value.split(',').map((id) => Number(id)),
+                },
+              },
+            });
           } else {
-            query.where(filter.variable).equals(filter.value);
+            pipeline.push({
+              $match: {
+                [filter.variable]: filter.value,
+              },
+            });
           }
-        } else if (filter.operator == '~') {
-          query
-            .where(filter.variable)
-            .regex(new RegExp(filter.value.slice(2, -2), 'i'));
+        } else if (filter.operator === '~') {
+          pipeline.push({
+            $match: {
+              [filter.variable]: {
+                $regex: new RegExp(filter.value.slice(2, -2), 'i'),
+              },
+            },
+          });
         }
       });
     }
 
-    return query.exec();
+    // Ajouter le tri à la pipeline d'agrégation
+    if (sort) {
+      pipeline.push({
+        $sort: {
+          [sort.name]: sort.order === 'asc' ? 1 : -1,
+        },
+      });
+    }
+
+    pipeline.push({ $limit: 10 });
+
+    // Exécuter la pipeline d'agrégation
+    return this._gameModel.aggregate(pipeline).exec();
   }
 
   getGame(id: number) {
-    return this._personModel.findOne({ igdbId: id }).exec();
+    return this._gameModel.findOne({ igdbId: id }).exec();
   }
 
   async create(
@@ -59,7 +108,7 @@ export class GameDao {
     platforms: number[],
     genres: number[],
   ) {
-    await this._personModel.create({
+    await this._gameModel.create({
       igdbId: igbdId,
       name: name,
       steamAppId: steamAppId,
@@ -73,7 +122,7 @@ export class GameDao {
   }
 
   async modify(igbdId: number, steamAppId: number, price: number) {
-    await this._personModel.updateOne(
+    await this._gameModel.updateOne(
       { igdbId: igbdId },
       {
         steamAppId: steamAppId,

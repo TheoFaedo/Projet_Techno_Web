@@ -98,7 +98,7 @@ export class GameEntity {
   cover: CoverEntity;
 
   @Expose()
-  rating: number; // If not saved, the rating is the igdb rating else the saved rating
+  averageRating: number; // If not saved, the rating is the igdb rating else the saved rating
 
   @Expose()
   summary: string;

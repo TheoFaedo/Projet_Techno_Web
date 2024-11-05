@@ -34,7 +34,7 @@ export type Game = {
     game_modes: Gamemode[];
     websites: Website[];
     cover: {url: string};
-    rating: number;
+    averageRating: number;
     summary: string;
     steam_price: number;
     advises?: Advise[];

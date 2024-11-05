@@ -121,7 +121,7 @@
     </div>
     
 </div>
-<mat-list *ngFor="let game of games" style="padding: 0 1rem;">
+<mat-list *ngFor="let game of games" style="padding: 1rem;">
     @if(game.name){
         <mat-list-item>
             @if(game.cover && game.cover.url){<img matListItemAvatar src="https:{{ game.cover.url }}" class="game-cover"/>}
@@ -146,6 +146,11 @@
                 <mat-chip-set *ngFor="let platform of game.platforms" class="caracteristic_mat-chip-set">
                     <mat-chip class="small-chip" disableRipple>{{ platform.name }}</mat-chip>
                 </mat-chip-set>
+            </div>
+
+            <div class="caracteristic">
+                <span>Note :</span>
+                <mat-chip class="small-chip" disableRipple>@if(game.averageRating){ {{ game.averageRating }} }@else{0} / 10</mat-chip>
             </div>
         </div>
     }

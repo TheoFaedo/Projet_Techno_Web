@@ -4,6 +4,7 @@ import { IgdbService, RequestFilter } from 'src/igdb/igdb.service';
 import { GameEntity } from './game.entities';
 import { SearchGameDto } from './dto/searchGame.dto';
 import { SortOrder } from 'mongoose';
+import { Game } from './schemas/game.schema';
 
 type SortTuple = {
   name: string;
@@ -12,8 +13,8 @@ type SortTuple = {
 };
 
 const sortStringAssociation: { [key: string]: SortTuple } = {
-  rating_asc: { name: 'rating', order: 'asc', isIgdbSort: false },
-  rating_desc: { name: 'rating', order: 'desc', isIgdbSort: false },
+  rating_asc: { name: 'averageRating', order: 'asc', isIgdbSort: false },
+  rating_desc: { name: 'averageRating', order: 'desc', isIgdbSort: false },
   release_asc: { name: 'first_release_date', order: 'asc', isIgdbSort: true },
   release_desc: { name: 'first_release_date', order: 'desc', isIgdbSort: true },
   name_asc: { name: 'name', order: 'asc', isIgdbSort: true },
@@ -37,12 +38,6 @@ export class GameService {
    * @returns a list of GameEntity with the found games
    */
   async getAllGames(params: SearchGameDto = {}): Promise<GameEntity[]> {
-    const gameQuery = this.igdbService
-      .createRequest()
-      .games()
-      .basicGamesFields()
-      .filter(RequestFilter.create('parent_game', '=', 'null'))
-      .filter(RequestFilter.create('version_parent', '=', 'null'));
 
     // Filters
     const requestFilters: RequestFilter[] = [];
@@ -62,43 +57,84 @@ export class GameService {
         RequestFilter.create('platforms', '=', "("+params.platforms.toString()+")"),
       );
 
-    if (requestFilters.length > 0) gameQuery.filters(requestFilters);
-
-    // Sorts
     const sortTuple: SortTuple = params.sort
       ? sortStringAssociation[params.sort]
       : null;
-    if (sortTuple && sortTuple.isIgdbSort) {
-      if (sortTuple.isIgdbSort)
-        gameQuery.sort(sortTuple.name, sortTuple.order.toString());
-    } else {
-      gameQuery.sort('rating', 'desc');
-    }
 
-    gameQuery.limit(10);
+    if(!sortTuple || sortTuple.isIgdbSort){
+      const gameQuery = this.igdbService
+        .createRequest()
+        .games()
+        .basicGamesFields()
+        .filter(RequestFilter.create('parent_game', '=', 'null'))
+        .filter(RequestFilter.create('version_parent', '=', 'null'));
 
-    // Get IGDB games
-    const igdb_games = await gameQuery.execute();
-    //console.log(igdb_games);
+      if (requestFilters.length > 0) gameQuery.filters(requestFilters);
 
-    // Get saved games
-    const saved_games = await this.gameDao.getGames(
-      sortTuple && sortTuple.isIgdbSort
-        ? { name: sortTuple.name, order: sortTuple.order }
-        : null,
-      requestFilters,
-    );
-    //console.log(saved_games);
-
-    // Add saved features to games
-    igdb_games.forEach((game: { [x: string]: any; id: string | number }) => {
-      if (saved_games[game.id]) {
-        if (saved_games[game.id]['price'])
-          game['steam_price'] = saved_games[game.id]['price'];
+      // Sorts
+      if (sortTuple && sortTuple.isIgdbSort) {
+        if (sortTuple.isIgdbSort)
+          gameQuery.sort(sortTuple.name, sortTuple.order.toString());
+      } else {
+        gameQuery.sort('rating', 'desc');
       }
-    });
+  
+      gameQuery.limit(10);
+  
+      // Get IGDB games
+      const igdb_games = await gameQuery.execute();
 
-    return igdb_games.map((game: Partial<GameEntity>) => new GameEntity(game));
+      const saved_games = await this.gameDao.getGames(sortTuple && { name: sortTuple.name, order: sortTuple.order }, requestFilters);
+      
+      const saved_games_by_id = saved_games.reduce((previousValue: { [x: string]: any; }, currentValue: { igdbId: number; }) => {
+        previousValue[currentValue.igdbId] = currentValue;
+        return previousValue;
+      }, {});
+
+      // Add saved features to games
+      igdb_games.forEach((game: { [x: string]: any; id: string | number }) => {
+        if (saved_games_by_id[game.id]) {
+          if (saved_games_by_id[game.id]['price'])
+            game['steam_price'] = saved_games_by_id[game.id]['price'];
+          if (saved_games_by_id[game.id]['averageRating'] != undefined && saved_games_by_id[game.id]['averageRating'] != null) 
+            game['averageRating'] = saved_games_by_id[game.id]['averageRating'];
+        }
+      });
+
+      return igdb_games.map((game: Partial<GameEntity>) => new GameEntity(game));
+      
+    }else{
+      const saved_games = await this.gameDao.getGames(sortTuple && { name: sortTuple.name, order: sortTuple.order }, requestFilters);
+      const saved_games_ids = saved_games.map((game: Game) => game.igdbId);
+
+      const igdb_games = await this.igdbService.createRequest()
+        .games()
+        .basicGamesFields()
+        .limit(10)
+        .filter(RequestFilter.create('id', '=', '(' + saved_games_ids.join(',') + ')'))
+        .execute();
+
+      const igbd_games_by_id = igdb_games.reduce((previousValue: { [x: string]: any; }, currentValue: { id: string | number; }) => {
+        previousValue[currentValue.id] = currentValue;
+        return previousValue;
+      }, {});
+
+      saved_games.forEach((game: Game) => {
+        if (igbd_games_by_id[game.igdbId]) {
+          if(igbd_games_by_id[game.igdbId]['game_modes'])
+            game['game_modes'] = igbd_games_by_id[game.igdbId]['game_modes'];
+          if(igbd_games_by_id[game.igdbId]['genres'])
+            game['genres'] = igbd_games_by_id[game.igdbId]['genres'];
+          if(igbd_games_by_id[game.igdbId]['platforms'])
+            game['platforms'] = igbd_games_by_id[game.igdbId]['platforms'];
+          if(igbd_games_by_id[game.igdbId]['cover']){
+            game['cover'] = igbd_games_by_id[game.igdbId]['cover'];
+          }
+        }
+      });
+
+      return saved_games.map((game: Partial<GameEntity>) => new GameEntity(game));
+    }    
   }
 
   /**
