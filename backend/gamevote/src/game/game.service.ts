@@ -50,11 +50,16 @@ export class GameService {
       requestFilters.push(RequestFilter.create('name', '~', `*"${params.q}"*`));
     if (params.game_modes)
       requestFilters.push(
-        RequestFilter.create('game_modes', '=', params.game_modes.toString()),
+        RequestFilter.create('game_modes', '=', "("+(params.game_modes.toString())+")"),
       );
     if (params.genres)
       requestFilters.push(
-        RequestFilter.create('genres', '=', params.genres.toString()),
+        RequestFilter.create('genres', '=', "("+params.genres.toString()+")"),
+      );
+    
+    if (params.platforms)
+      requestFilters.push(
+        RequestFilter.create('platforms', '=', "("+params.platforms.toString()+")"),
       );
 
     if (requestFilters.length > 0) gameQuery.filters(requestFilters);
@@ -74,7 +79,7 @@ export class GameService {
 
     // Get IGDB games
     const igdb_games = await gameQuery.execute();
-    console.log(igdb_games);
+    //console.log(igdb_games);
 
     // Get saved games
     const saved_games = await this.gameDao.getGames(
@@ -83,7 +88,7 @@ export class GameService {
         : null,
       requestFilters,
     );
-    console.log(saved_games);
+    //console.log(saved_games);
 
     // Add saved features to games
     igdb_games.forEach((game: { [x: string]: any; id: string | number }) => {
@@ -123,7 +128,7 @@ export class GameService {
         : null;
       const platforms = game.platforms ? game.platforms.map((platform: any) => platform.id) : [];
       const genres = game.genres ? game.genres.map((genre: any) => genre.id) : [];
-      const game_modes = game.game_modes ? game.game_modes.map((game_mode: any) => game_mode.id) : [];
+      const game_modes = game.game_modes ? game.game_modes.map((game_mode: any) => game_mode.id).toString() : [];
 
       await this.gameDao.create(
         igdbId,
