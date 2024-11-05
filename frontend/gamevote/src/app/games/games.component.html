@@ -1,52 +1,152 @@
-<div class="filter-container">
+<div class="filter_container">
     <mat-form-field>
         <mat-label>Rechercher un jeu</mat-label>
-        <input matInput placeholder="Tapez pour rechercher">
+        <input matInput placeholder="Tapez pour rechercher" (input)="handleSearchChange($event)">
     </mat-form-field>
 
-    <mat-form-field appearance="fill" floatLabel="always">
-        <mat-label>Filtrer par type</mat-label>
-        <mat-select multiple>
-            <mat-option>Pas de filtre</mat-option>
-            <mat-option value="cooperative">Coopératif</mat-option>
-            <mat-option value="solo">Solo</mat-option>
-            <mat-option value="multiplayer">Multijoueur</mat-option>
+    <mat-form-field floatLabel="always">
+        <mat-label>Game modes</mat-label>
+        <mat-select multiple (selectionChange)="handleGamemodesSelectionChange($event)">
+            <mat-option value="1">Solo</mat-option>
+            <mat-option value="2">Multiplayer</mat-option>
+            <mat-option value="3">Co-operative</mat-option>
+            <mat-option value="4">Split screen</mat-option>
+            <mat-option value="5">MMO</mat-option>
+            <mat-option value="6">Battle Royale</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field floatLabel="always">
+        <mat-label>Genres</mat-label>
+        <mat-select multiple (selectionChange)="handleGenresSelectionChange($event)">
+            <mat-option value="2">Point-and-click</mat-option>
+            <mat-option value="4">Fighting</mat-option>
+            <mat-option value="5">Shooter</mat-option>
+            <mat-option value="7">Music</mat-option>
+            <mat-option value="8">Platform</mat-option>
+            <mat-option value="9">Puzzle</mat-option>
+            <mat-option value="10">Racing</mat-option>
+            <mat-option value="11">RTS</mat-option>
+            <mat-option value="12">RPG</mat-option>
+            <mat-option value="13">Simulator</mat-option>
+            <mat-option value="14">Sport</mat-option>
+            <mat-option value="15">Strategy</mat-option>
+            <mat-option value="16">TBS</mat-option>
+            <mat-option value="24">Tactical</mat-option>
+            <mat-option value="25">Beat 'em up</mat-option>
+            <mat-option value="26">Quiz/Trivia</mat-option>
+            <mat-option value="30">Pinball</mat-option>
+            <mat-option value="31">Adventure</mat-option>
+            <mat-option value="32">Indie</mat-option>
+            <mat-option value="33">Arcade</mat-option>
+            <mat-option value="34">Visual Novel</mat-option>
+            <mat-option value="35">Card & Board Game</mat-option>
+            <mat-option value="36">MOBA</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field floatLabel="always">
+        <mat-label>Platforms</mat-label>
+        <mat-select multiple (selectionChange)="handlePlatformsSelectionChange($event)">
+            <mat-option value="3">Linux</mat-option>
+            <mat-option value="4">Nintendo 64</mat-option>
+            <mat-option value="5">Wii</mat-option>
+            <mat-option value="6">PC (Microsoft Windows)</mat-option>
+            <mat-option value="7">PlayStation</mat-option>
+            <mat-option value="8">PlayStation 2</mat-option>
+            <mat-option value="9">PlayStation 3</mat-option>
+            <mat-option value="11">Xbox</mat-option>
+            <mat-option value="12">Xbox 360</mat-option>
+            <mat-option value="13">DOS</mat-option>
+            <mat-option value="14">Mac</mat-option>
+            <mat-option value="15">Commodore C64/128/MAX</mat-option>
+            <mat-option value="16">Amiga</mat-option>
+            <mat-option value="18">Nintendo Entertainment System</mat-option>
+            <mat-option value="19">Super Nintendo Entertainment System</mat-option>
+            <mat-option value="20">Nintendo DS</mat-option>
+            <mat-option value="21">Nintendo GameCube</mat-option>
+            <mat-option value="22">Game Boy Color</mat-option>
+            <mat-option value="23">Dreamcast</mat-option>
+            <mat-option value="24">Game Boy Advance</mat-option>
+            <mat-option value="25">Amstrad CPC</mat-option>
+            <mat-option value="26">ZX Spectrum</mat-option>
+            <mat-option value="27">MSX</mat-option>
+            <mat-option value="29">Sega Mega Drive/Genesis</mat-option>
+            <mat-option value="30">Sega 32X</mat-option>
+            <mat-option value="32">Sega Saturn</mat-option>
+            <mat-option value="33">Game Boy</mat-option>
+            <mat-option value="34">Android</mat-option>
+            <mat-option value="35">Sega Game Gear</mat-option>
+            <mat-option value="37">Nintendo 3DS</mat-option>
+            <mat-option value="38">PlayStation Portable</mat-option>
+            <mat-option value="39">iOS</mat-option>
+            <mat-option value="41">Wii U</mat-option>
+            <mat-option value="42">N-Gage</mat-option>
+            <mat-option value="44">Tapwave Zodiac</mat-option>
+            <mat-option value="46">PlayStation Vita</mat-option>
+            <mat-option value="47">Virtual Console</mat-option>
+            <mat-option value="48">PlayStation 4</mat-option>
+            <mat-option value="49">Xbox One</mat-option>
+            <mat-option value="50">3DO Interactive Multiplayer</mat-option>
+            <mat-option value="51">Family Computer Disk System</mat-option>
+            <mat-option value="52">Arcade</mat-option>
+            <mat-option value="53">MSX2</mat-option>
+            <mat-option value="55">Legacy Mobile Device</mat-option>
+            <mat-option value="57">WonderSwan</mat-option>
+            <mat-option value="58">Super Famicom</mat-option>
+            <mat-option value="59">Atari 2600</mat-option>
+            <mat-option value="60">Atari 7800</mat-option>
+            <mat-option value="61">Atari Lynx</mat-option>
+            <mat-option value="62">Atari Jaguar</mat-option>
         </mat-select>
     </mat-form-field>
 
     <mat-form-field>
-        <mat-label>Trier par</mat-label>
-        <mat-select>
-            <mat-option value="name">Nom</mat-option>
-            <mat-option value="rating">Note</mat-option>
-            <mat-option value="price">Prix</mat-option>
+        <mat-label>Sort by</mat-label>
+        <mat-select (selectionChange)="handleSortChange($event)">
+            <mat-option value="name_asc">Name AZ</mat-option>
+            <mat-option value="name_desc">Name ZA</mat-option>
+            <mat-option value="release_asc">Oldest</mat-option>
+            <mat-option value="release_desc">Newest</mat-option>
+            <mat-option value="price_asc">Price ascending</mat-option>
+            <mat-option value="price_desc">Price descending</mat-option>
+            <mat-option value="rating_asc">Note ascending</mat-option>
+            <mat-option value="rating_desc">Note descending</mat-option>
         </mat-select>
     </mat-form-field>
-</div>
-<mat-list *ngFor="let game of games">
-    <mat-list-item>
-        <img matListItemAvatar src="https:{{ game.cover.url }}" class="game-cover"/>
-        <h3 matListItemTitle><a [routerLink]="['/game', game.id]">{{ game.name }}</a></h3>
-        <p matListItemLine>{{ game.summary }}</p>
-    </mat-list-item>
-    <div class="caracteristics_container">
-        <div class="caracteristic">
-            <span>Mode(s) de jeu :</span>
-            <mat-chip-set *ngFor="let mode of game.game_modes" class="caracteristic_mat-chip-set">
-                <mat-chip class="small-chip" disableRipple>{{ mode.name }}</mat-chip>
-            </mat-chip-set>
-        </div>
-        <div class="caracteristic">
-            <span>Genre(s) :</span>
-            <mat-chip-set *ngFor="let genre of game.genres" class="caracteristic_mat-chip-set">
-                <mat-chip class="small-chip" disableRipple>{{ genre.name }}</mat-chip>
-            </mat-chip-set>
-        </div>
-        <div class="caracteristic">
-            <span>Plateforme(s) :</span>
-            <mat-chip-set *ngFor="let platform of game.platforms" class="caracteristic_mat-chip-set">
-                <mat-chip class="small-chip" disableRipple>{{ platform.name }}</mat-chip>
-            </mat-chip-set>
-        </div>
+
+    <div>
+        <button mat-flat-button color="primary" (click)="handleSearchRequest($event)">Valider</button>
+        <div style="height: 22px;"></div>
     </div>
+    
+</div>
+<mat-list *ngFor="let game of games" style="padding: 0 1rem;">
+    @if(game.name){
+        <mat-list-item>
+            @if(game.cover && game.cover.url){<img matListItemAvatar src="https:{{ game.cover.url }}" class="game-cover"/>}
+            <h3 matListItemTitle><a [routerLink]="['/game', game.id]">{{ game.name }}</a></h3>
+            <p matListItemLine>{{ game.summary }}</p>
+        </mat-list-item>
+        <div class="caracteristics_container">
+            <div class="caracteristic">
+                <span>Mode(s) de jeu :</span>
+                <mat-chip-set *ngFor="let mode of game.game_modes" class="caracteristic_mat-chip-set">
+                    <mat-chip class="small-chip" disableRipple>{{ mode.name }}</mat-chip>
+                </mat-chip-set>
+            </div>
+            <div class="caracteristic">
+                <span>Genre(s) :</span>
+                <mat-chip-set *ngFor="let genre of game.genres" class="caracteristic_mat-chip-set">
+                    <mat-chip class="small-chip" disableRipple>{{ genre.name }}</mat-chip>
+                </mat-chip-set>
+            </div>
+            <div class="caracteristic">
+                <span>Plateforme(s) :</span>
+                <mat-chip-set *ngFor="let platform of game.platforms" class="caracteristic_mat-chip-set">
+                    <mat-chip class="small-chip" disableRipple>{{ platform.name }}</mat-chip>
+                </mat-chip-set>
+            </div>
+        </div>
+    }
 </mat-list>

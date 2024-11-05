@@ -7,6 +7,7 @@ import {
   IsNumberString,
   IsOptional,
   IsString,
+  Matches,
 } from 'class-validator';
 
 enum SortEnum {
@@ -22,7 +23,7 @@ enum SortEnum {
 
 export class SearchGameDto {
   @IsOptional()
-  @IsAlphanumeric()
+  @Matches(/^[a-zA-Z0-9 ]*$/, { message: 'q can only contain letters, numbers, and spaces' })
   q?: string;
 
   @IsOptional()

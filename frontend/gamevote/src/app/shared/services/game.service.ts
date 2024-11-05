@@ -27,12 +27,24 @@ export class GameService{
         );
     }
 
-    allGames(): Observable<Game[]> {
-        return this._httpClient.get<Game[]>(this._backendURL.allGames) as Observable<Game[]>;
+    allGames(params: string[]): Observable<Game[]> {
+        const paramsStr = params.length > 0 ? "?" + params.join("&") : "";
+        return this._httpClient.get<Game[]>(this._backendURL.allGames+paramsStr) as Observable<Game[]>;
     }
 
     oneGame(id: number): Observable<Game> {
         return this._httpClient.get<Game>(this._backendURL.oneGame.replace(':id', id.toString())) as Observable<Game>;
     }
-    
+
+    sortStr(sort_id: string): string{
+        return "sort=" + sort_id;
+    }
+
+    filterStr(filter_field: string, filter_id: string): string{
+        return filter_field +"[]=" + filter_id;
+    }
+
+    qStr(q: string): string{
+        return "q=" + q;
+    }
 }
