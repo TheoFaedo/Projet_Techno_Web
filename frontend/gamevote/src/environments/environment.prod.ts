@@ -7,6 +7,8 @@ export const environment = {
     endpoints: {
       allGames: '/games',
       oneGame: '/games/:id',
+      getComments: '/advices',
+      addComment: '/advices/:gameId/add',
     }
   }
 };

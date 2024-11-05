@@ -11,7 +11,7 @@ export class UpdateAdviceDto {
     description: 'Unique identifier of the related game',
     example: '1234',
   })
-  gameId?: string;
+  gameId?: number;
 
   @ApiPropertyOptional({
     description: 'Name of the author of the advice',

@@ -1,119 +1,112 @@
-import { Exclude, Expose, Type } from "class-transformer";
+import { Exclude, Expose, Type } from 'class-transformer';
 
 @Exclude()
 class PlatFormEntity {
+  @Expose()
+  name: string;
 
-    @Expose()
-    name: string;
+  @Expose()
+  category: number;
 
-    @Expose()
-    category: number;
-
-
-    constructor(partial: Partial<PlatFormEntity>) {
-        Object.assign(this, partial);
-    }
+  constructor(partial: Partial<PlatFormEntity>) {
+    Object.assign(this, partial);
+  }
 }
 
 @Exclude()
 class GenreEntity {
+  @Expose()
+  id: number;
 
-    @Expose()
-    id: number;
+  @Expose()
+  name: string;
 
-    @Expose()
-    name: string;
-
-    constructor(partial: Partial<GenreEntity>) {
-        Object.assign(this, partial);
-    }
+  constructor(partial: Partial<GenreEntity>) {
+    Object.assign(this, partial);
+  }
 }
 
 @Exclude()
-class GamemodeEntity{
+class GamemodeEntity {
+  @Expose()
+  id: number;
 
-    @Expose()
-    id: number;
+  @Expose()
+  name: string;
 
-    @Expose()
-    name: string;
-
-    constructor(partial: Partial<GamemodeEntity>) {
-        Object.assign(this, partial);
-    }
+  constructor(partial: Partial<GamemodeEntity>) {
+    Object.assign(this, partial);
+  }
 }
 
 @Exclude()
-class WebsiteEntity{
+class WebsiteEntity {
+  id: number;
 
-    id: number;
+  @Expose()
+  url: string;
 
-    @Expose()
-    url: string;
+  @Expose()
+  category: number;
 
-    @Expose()
-    category: number;
-
-    constructor(partial: Partial<WebsiteEntity>) {
-        Object.assign(this, partial);
-    }
+  constructor(partial: Partial<WebsiteEntity>) {
+    Object.assign(this, partial);
+  }
 }
 
 @Exclude()
-class CoverEntity{
+class CoverEntity {
+  id: number;
 
-    id: number;
+  @Expose()
+  url: string;
 
-    @Expose()
-    url: string;
-
-    constructor(partial: Partial<CoverEntity>) {
-        Object.assign(this, partial);
-    }
+  constructor(partial: Partial<CoverEntity>) {
+    Object.assign(this, partial);
+  }
 }
 
 @Exclude()
 export class GameEntity {
+  @Expose()
+  id: number;
 
-    @Expose()
-    id: number;
-    
-    @Expose()
-    name: string;
+  @Expose()
+  name: string;
 
-    @Expose()
-    first_release_date: number;
+  @Expose()
+  first_release_date: number;
 
-    @Expose()
-    @Type(() => PlatFormEntity)
-    platforms: PlatFormEntity[];
-    
-    @Expose()
-    @Type(() => GenreEntity)
-    genres: GenreEntity[];
+  @Expose()
+  @Type(() => PlatFormEntity)
+  platforms: PlatFormEntity[];
 
-    @Expose()
-    @Type(() => GamemodeEntity)
-    game_modes: GamemodeEntity[];
+  @Expose()
+  @Type(() => GenreEntity)
+  genres: GenreEntity[];
 
-    @Expose()
-    @Type(() => WebsiteEntity)
-    websites: WebsiteEntity[];
+  @Expose()
+  @Type(() => GamemodeEntity)
+  game_modes: GamemodeEntity[];
 
-    @Expose()
-    @Type(() => CoverEntity)
-    cover: CoverEntity;
+  @Expose()
+  @Type(() => WebsiteEntity)
+  websites: WebsiteEntity[];
 
-    @Expose()
-    rating: number; // If not saved, the rating is the igdb rating else the saved rating
+  @Expose()
+  @Type(() => CoverEntity)
+  cover: CoverEntity;
 
-    @Expose()
-    summary: string;
+  @Expose()
+  rating: number; // If not saved, the rating is the igdb rating else the saved rating
 
-    @Expose()
-    steam_price: number;
+  @Expose()
+  summary: string;
 
-    constructor(partial: Partial<GameEntity>) {
-        Object.assign(this, partial);
-    }
+  @Expose()
+  steam_price: number;
+
+  constructor(partial: Partial<GameEntity>) {
+    Object.assign(this, partial);
+  }
 }

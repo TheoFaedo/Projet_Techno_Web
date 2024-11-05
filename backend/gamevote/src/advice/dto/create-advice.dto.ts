@@ -1,13 +1,11 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsAlpha, IsAlphanumeric, IsAscii, IsNumber } from 'class-validator';
+import { IsAlpha, IsAscii, IsNumber, Max, Min } from 'class-validator';
 
 export class CreateAdviceDto {
   @ApiProperty({
     description: 'The ID of the game associated with the advice',
     example: 123,
   })
-
-  @IsNumber()
   gameId: number;
 
   @ApiProperty({
@@ -29,4 +27,13 @@ export class CreateAdviceDto {
     example: 'Can also check the reviews on Steam.',
   })
   additionalComments?: string;
+
+  @ApiProperty({
+    description: 'The rating for the game, ranging from 0 to 10',
+    example: 8,
+  })
+  @IsNumber()
+  @Min(0)
+  @Max(10)
+  note: number;
 }
