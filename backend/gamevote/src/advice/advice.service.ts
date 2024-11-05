@@ -35,11 +35,22 @@ export class AdviceService {
   /**
    * Create a new advice
    *
+   * @param {number} gameId
    * @param {CreateAdviceDto} createAdviceDto - DTO containing advice data
    * @return {Promise<Advice>}
    */
-  async createAdvice(createAdviceDto: CreateAdviceDto): Promise<AdviceEntity> {
-    return this.adviceDao.create(createAdviceDto).then((advice) => new AdviceEntity(advice)).then((advice) => {console.log(advice); return advice;});
+  async createAdvice(
+    gameId: number,
+    createAdviceDto: CreateAdviceDto,
+  ): Promise<AdviceEntity> {
+    const adviceData = { ...createAdviceDto, gameId };
+    return this.adviceDao
+      .create(adviceData)
+      .then((advice) => new AdviceEntity(advice))
+      .then((advice) => {
+        console.log(advice);
+        return advice;
+      });
   }
 
   /**

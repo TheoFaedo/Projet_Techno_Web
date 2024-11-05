@@ -7,13 +7,11 @@ import { GameService } from './game.service';
 import { IgdbModule } from 'src/igdb/igdb.module';
 
 @Module({
-    imports: [
-        MongooseModule.forFeature([{name: Game.name, schema: GameSchema}]),
-        IgdbModule
-    ],
-    controllers: [GameController],
-    providers: [GameDao, GameService],
+  imports: [
+    MongooseModule.forFeature([{ name: Game.name, schema: GameSchema }]),
+    IgdbModule,
+  ],
+  controllers: [GameController],
+  providers: [GameDao, GameService],
 })
-export class GameModule {
-    
-}
+export class GameModule {}

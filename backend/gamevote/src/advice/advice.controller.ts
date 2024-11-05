@@ -47,14 +47,18 @@ export class AdviceController {
 
   /**
    * Create a new advice
+   * @param {number} gameId
    * @param {CreateAdviceDto} createAdviceDto - Data for creating an advice
    */
   @UseInterceptors(ClassSerializerInterceptor)
-  @Post() // Route to create a new advice
+  @Post('/:gameId/add') // Route to create a new advice
   async createAdvice(
+    @Param('gameId') gameIdParam: string,
     @Body() createAdviceDto: CreateAdviceDto,
   ): Promise<AdviceEntity> {
-    return this.adviceService.createAdvice(createAdviceDto);
+    const gameId = parseInt(gameIdParam, 10);
+    console.log('Received gameId:', typeof gameId);
+    return this.adviceService.createAdvice(gameId, createAdviceDto);
   }
 
   /**

@@ -34,6 +34,11 @@ export class Advice {
     required: true,
   })
   content: string;
+  @Prop({
+    type: Number,
+    required: true,
+  })
+  note: number;
 }
 
 export const AdviceSchema = SchemaFactory.createForClass(Advice);

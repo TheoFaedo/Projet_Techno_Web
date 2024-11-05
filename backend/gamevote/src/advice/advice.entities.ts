@@ -3,7 +3,7 @@ import { Exclude, Expose } from 'class-transformer';
 @Exclude()
 export class AdviceEntity {
   @Expose()
-  id: number;
+  _id: number;
 
   @Expose()
   gameId: number;
@@ -12,6 +12,8 @@ export class AdviceEntity {
   author: string;
   @Expose()
   content: string;
+  @Expose()
+  note: number;
 
   constructor(partial: Partial<AdviceEntity>) {
     Object.assign(this, partial);
