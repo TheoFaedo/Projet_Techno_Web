@@ -41,6 +41,15 @@ nest start
 
 Le serveur est alors disponible à l'addresse *localhost:3000*.
 
+Le backend contient 6 routes :
+
+- GET /games/
+- GET/games/:id
+- GET /advices/game/:gameId
+- POST /advices/:gameId/add
+- PUT /advices/:id
+- DELETE /advices/:id
+
 #### Données pour la base de données
 
 Les fichiers présents dans le repertoire */backend/gamevote/scripts* contiennent des requête mongodb permettant d'initialiser un jeu de données. Il peut être intéressant de rechercher "Pokémon" dans la barre de recherche de l'application.
