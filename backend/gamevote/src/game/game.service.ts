@@ -66,7 +66,6 @@ export class GameService {
         .createRequest()
         .games()
         .basicGamesFields()
-        .filter(RequestFilter.create('parent_game', '=', 'null'))
         .filter(RequestFilter.create('version_parent', '=', 'null'));
 
       if (requestFilters.length > 0) gameQuery.filters(requestFilters);
@@ -119,7 +118,9 @@ export class GameService {
         return previousValue;
       }, {});
 
-      saved_games.forEach((game: Game) => {
+      console.log(igbd_games_by_id)
+
+      saved_games.forEach((game: Game & { averageRating: number }) => {
         if (igbd_games_by_id[game.igdbId]) {
           if(igbd_games_by_id[game.igdbId]['game_modes'])
             game['game_modes'] = igbd_games_by_id[game.igdbId]['game_modes'];
@@ -129,8 +130,11 @@ export class GameService {
             game['platforms'] = igbd_games_by_id[game.igdbId]['platforms'];
           if(igbd_games_by_id[game.igdbId]['cover']){
             game['cover'] = igbd_games_by_id[game.igdbId]['cover'];
+          if(igbd_games_by_id[game.igdbId]['id'])
+            game['id'] = Number(igbd_games_by_id[game.igdbId]['id']);
           }
         }
+        if(game.averageRating != undefined && game.averageRating != null) game['averageRating'] = Number(game.averageRating.toFixed(1));
       });
 
       return saved_games.map((game: Partial<GameEntity>) => new GameEntity(game));

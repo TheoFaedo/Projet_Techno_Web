@@ -1,9 +1,6 @@
 import {
-  IsAlpha,
-  IsAlphanumeric,
   IsArray,
   IsEnum,
-  IsNumber,
   IsNumberString,
   IsOptional,
   IsString,
@@ -23,7 +20,7 @@ enum SortEnum {
 
 export class SearchGameDto {
   @IsOptional()
-  @Matches(/^[a-zA-Z0-9 ]*$/, { message: 'q can only contain letters, numbers, and spaces' })
+  @Matches(/^[a-zA-Z0-9éà ]*$/, { message: 'q can only contain letters, numbers, and spaces' })
   q?: string;
 
   @IsOptional()

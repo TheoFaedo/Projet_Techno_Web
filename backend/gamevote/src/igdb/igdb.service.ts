@@ -166,7 +166,7 @@ export class IgdbQuery {
 
     parsedBody += `limit ${this.request_limit < 50 ? this.request_limit : 50};`;
 
-    //console.log(parsedBody);
+    console.log(parsedBody);
 
     return fetch(`https://api.igdb.com/v4/${this.endpoint}`, {
       method: 'POST',

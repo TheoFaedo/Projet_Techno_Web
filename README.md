@@ -8,7 +8,7 @@ L'application se base sur une api pour pouvoir rechercher des jeux mais la notat
 
 ## Installation
 
-### Backend 
+### Back-end 
 
 Copiez/Collez le fichier *.env.example*, puis renommer le nouveau fichier en *.env*, vous pouvez dans celui-ci, déterminer les variables d'environnements de l'applications telles que les clé d'accès à l'api IGDB par exemple.
 
@@ -23,4 +23,34 @@ Pour lancer la base de données, toujours dans la repertoire */backend/gamevote*
 ```bash
 docker compose -f ./scripts/docker-compose.yml up
 ```
+
+Pour lancer le backend en dev vous pouvez en suite effectuer la commande :
+
+```bash
+nest start
+```
+
+Le serveur est alors disponible à l'addresse *localhost:3000*.
+
+#### Données pour la base de données
+
+Les fichiers présents dans le repertoire */backend/gamevote/scripts* contiennent des requête mongodb permettant d'initialiser un jeu de données. Il peut être intéressant de rechercher "Pokémon" dans la barre de recherche de l'application.
+
+### Front-end
+
+Il faudra ensuite installer les dépendances. Pour cela, il est conseillé d'utiliser le gestionnaire de package *yarn* dans le repertoire */frontend/gamevote* comme suit :
+
+```bash
+yarn install
+```
+
+Vous pouvez ensuite lancer le serveur via la commande :
+
+```bash
+yarn run start
+```
+
+Le serveur est alors disponible à l'addresse *localhost:4200*.
+
+
 
