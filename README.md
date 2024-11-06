@@ -17,6 +17,13 @@ L'application se base sur des api pour pouvoir rechercher des jeux mais la notat
 
 ## Installation
 
+### Requirements
+
+- Nodejs v22.7.0+
+- yarn v1.22.22+
+- Angular v18.2.10+
+- Docker v27.2.0+
+
 ### Back-end 
 
 Copiez/Collez le fichier *.env.example*, puis renommer le nouveau fichier en *.env*, vous pouvez dans celui-ci, déterminer les variables d'environnements de l'applications telles que les clé d'accès à l'api IGDB par exemple.
