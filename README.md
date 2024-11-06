@@ -2,9 +2,18 @@
 
 GameVote est une application qui propose à ses utilisateur de rechercher des jeux vidéos à l'aide plusieurs critères.
 
+## Authors
+
+Théo FAEDO
+Ismail TAGMOUTI
+
+## Documents
+
+Le repertoire */documents* contient différentes captures d'écran photos et vidéos de l'application ainsi que le diaporama de présentation du projet sous différents formats.
+
 ## Fonctionnement
 
-L'application se base sur une api pour pouvoir rechercher des jeux mais la notation est gérée au niveau de la base de donnée de l'application.
+L'application se base sur des api pour pouvoir rechercher des jeux mais la notation est gérée au niveau de la base de donnée de l'application.
 
 ## Installation
 
